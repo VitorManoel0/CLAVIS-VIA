@@ -14,6 +14,7 @@ function Register() {
   const [c, sc] = useState("");
   const [v, sv] = useState(false);
   const [err, ser] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   async function submit(x: React.FormEvent) {
     x.preventDefault();
     if (p !== c) {
