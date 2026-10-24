@@ -2,6 +2,12 @@
 
 Esta configuração publica o backend no Render, o frontend no Cloudflare Workers e mantém o PostgreSQL no Supabase.
 
+Endereços atuais:
+
+- frontend: `https://clavis-via.vmanoel-silva.workers.dev`;
+- backend: `https://clavis-via-api.onrender.com`;
+- documentação: `https://clavis-via-api.onrender.com/docs`.
+
 ## 1. Backend no Render
 
 1. Envie este repositório para o GitHub.
@@ -14,6 +20,20 @@ Esta configuração publica o backend no Render, o frontend no Cloudflare Worker
 O Render gera `JWT_SECRET_KEY` automaticamente. Não copie esse valor para o repositório.
 
 ## 2. Frontend no Cloudflare Workers
+
+### Deploy automático pelo GitHub
+
+Na configuração de builds do Worker:
+
+- branch de produção: `main`;
+- diretório raiz: `frontend`;
+- comando de build: `npm run build`;
+- comando de deploy: `npx wrangler deploy`;
+- variável de build: `VITE_API_URL=https://clavis-via-api.onrender.com`.
+
+Com essa configuração, cada push para `main` inicia uma nova publicação.
+
+### Deploy manual
 
 No terminal:
 
@@ -28,7 +48,7 @@ O comando recusa URLs locais ou sem HTTPS para evitar publicar um frontend apont
 ## 3. CORS definitivo
 
 1. Copie a URL `https://clavis-via.<sua-conta>.workers.dev` gerada pelo Cloudflare.
-2. No Render, altere `FRONTEND_URLS` para essa URL, sem barra no final.
+2. No Render, altere `FRONTEND_URLS` para essa URL, sem barra no final. Neste projeto, o valor é `https://clavis-via.vmanoel-silva.workers.dev`.
 3. Salve e faça um novo deploy do backend.
 4. Teste cadastro, login, check-in e logout pelo endereço público.
 

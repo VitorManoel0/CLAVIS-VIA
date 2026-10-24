@@ -159,7 +159,10 @@ function Onboarding() {
           ))}
         </div>
 
-        <section className="flex flex-1 flex-col justify-center py-10 text-center" aria-live="polite">
+        <section
+          className="flex flex-1 flex-col justify-center py-10 text-center"
+          aria-live="polite"
+        >
           <div
             className={`mx-auto flex h-24 w-24 items-center justify-center rounded-3xl ${slide.color}`}
           >
