@@ -7,6 +7,8 @@ import { AppShell } from "@/components/clavis/AppShell";
 import { MOODS } from "@/lib/content";
 import { createCheckin } from "@/lib/api";
 
+const CHECKIN_MOODS = MOODS.filter((mood) => mood.id !== "outro");
+
 export const Route = createFileRoute("/checkin")({
   ssr: false,
   head: () => ({
@@ -27,7 +29,7 @@ function CheckinPage() {
   const [note, setNote] = useState("");
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const selectedMood = MOODS.find((item) => item.id === mood);
+  const selectedMood = CHECKIN_MOODS.find((item) => item.id === mood);
 
   const save = useMutation({
     mutationFn: () => createCheckin(mood!, note),
@@ -51,7 +53,7 @@ function CheckinPage() {
         </p>
 
         <div className="mt-8 grid grid-cols-3 gap-3">
-          {MOODS.map((m) => {
+          {CHECKIN_MOODS.map((m) => {
             const active = mood === m.id;
             return (
               <button

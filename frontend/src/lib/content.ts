@@ -11,8 +11,6 @@ export const MOODS = [
   { id: "outro", label: "Outro", emoji: "•••", tone: "bg-muted" },
 ] as const;
 
-export type MoodId = (typeof MOODS)[number]["id"];
-
 export function moodLabel(id: string): string {
   return MOODS.find((m) => m.id === id)?.label ?? id;
 }

@@ -41,18 +41,6 @@ export function AppShell({ children, nav = true }: { children: ReactNode; nav?: 
 
   return (
     <MobileFrame>
-      {session && (
-        <div className="flex justify-end px-6 pt-4">
-          <button
-            type="button"
-            onClick={logout}
-            className="flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground"
-          >
-            <LogOut className="h-4 w-4" />
-            Sair
-          </button>
-        </div>
-      )}
       <main className="flex-1 pb-24">
         {loading || !session || !session.onboarding_completed ? (
           <div className="flex h-64 items-center justify-center text-muted-foreground">
@@ -62,12 +50,12 @@ export function AppShell({ children, nav = true }: { children: ReactNode; nav?: 
           children
         )}
       </main>
-      {nav && <BottomNav />}
+      {nav && <BottomNav onLogout={logout} />}
     </MobileFrame>
   );
 }
 
-function BottomNav() {
+function BottomNav({ onLogout }: { onLogout: () => void }) {
   const items = [
     { to: "/hoje", label: "Início", icon: Home },
     { to: "/planos", label: "Planos", icon: BookOpen },
@@ -75,7 +63,7 @@ function BottomNav() {
   ] as const;
   return (
     <nav className="fixed inset-x-0 bottom-0 mx-auto w-full max-w-md border-t bg-card/95 backdrop-blur">
-      <ul className="grid grid-cols-3">
+      <ul className="grid grid-cols-4">
         {items.map(({ to, label, icon: Icon }) => (
           <li key={to}>
             <Link
@@ -88,6 +76,16 @@ function BottomNav() {
             </Link>
           </li>
         ))}
+        <li>
+          <button
+            type="button"
+            onClick={onLogout}
+            className="flex w-full flex-col items-center gap-1 py-3 text-xs font-semibold text-destructive transition hover:bg-destructive/10"
+          >
+            <LogOut className="h-5 w-5" />
+            Sair
+          </button>
+        </li>
       </ul>
     </nav>
   );

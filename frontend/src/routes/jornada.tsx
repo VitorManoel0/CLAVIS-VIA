@@ -1,8 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { ptBR } from "date-fns/locale";
 import { CheckCircle2, Heart, Loader2 } from "lucide-react";
+import { useState } from "react";
 import { AppShell, Disclaimer, QueryError } from "@/components/clavis/AppShell";
-import { allPlanDaysQuery, checkinsQuery, completionsQuery, plansQuery } from "@/lib/api";
+import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
+import {
+  allPlanDaysQuery,
+  checkinsQuery,
+  completionsQuery,
+  plansQuery,
+  type Checkin,
+} from "@/lib/api";
 import { dayKey, moodEmoji, moodLabel, planProgress, streakDays } from "@/lib/content";
 
 export const Route = createFileRoute("/jornada")({
@@ -31,6 +40,24 @@ const fmt = new Intl.DateTimeFormat("pt-BR", {
   hour: "2-digit",
   minute: "2-digit",
 });
+const dayFmt = new Intl.DateTimeFormat("pt-BR", {
+  weekday: "long",
+  day: "2-digit",
+  month: "long",
+});
+const timeFmt = new Intl.DateTimeFormat("pt-BR", {
+  hour: "2-digit",
+  minute: "2-digit",
+});
+
+function checkinsByDay(checkins: Checkin[]) {
+  const grouped = new Map<string, Checkin[]>();
+  for (const checkin of checkins) {
+    const key = dayKey(new Date(checkin.created_at));
+    grouped.set(key, [...(grouped.get(key) ?? []), checkin]);
+  }
+  return grouped;
+}
 
 function Journey() {
   const checkins = useQuery(checkinsQuery);
@@ -48,6 +75,8 @@ function Journey() {
     );
 
   const list = checkins.data ?? [];
+  const groupedCheckins = checkinsByDay(list);
+  const latestCheckinDate = list[0] ? new Date(list[0].created_at) : new Date();
   const streak = streakDays(list.map((c) => new Date(c.created_at)));
   const checkedDays = new Set(list.map((c) => dayKey(new Date(c.created_at))));
   const last7 = Array.from({ length: 7 }, (_, i) => {
@@ -101,20 +130,11 @@ function Journey() {
             </Link>
           </p>
         ) : (
-          <ul className="mt-2 divide-y rounded-2xl border bg-card">
-            {list.slice(0, 8).map((c) => (
-              <li key={c.id} className="flex items-center gap-3 p-3 text-sm">
-                <span className="text-xl">{moodEmoji(c.mood)}</span>
-                <div className="flex-1">
-                  <p className="font-semibold">{moodLabel(c.mood)}</p>
-                  {c.note && <p className="text-xs text-muted-foreground line-clamp-1">{c.note}</p>}
-                </div>
-                <span className="text-xs text-muted-foreground">
-                  {fmt.format(new Date(c.created_at))}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <CheckinCalendar
+            checkins={list}
+            groupedCheckins={groupedCheckins}
+            initialMonth={latestCheckinDate}
+          />
         )}
       </section>
 
@@ -180,6 +200,98 @@ function Journey() {
         </ul>
       </section>
       <Disclaimer />
+    </div>
+  );
+}
+
+function CheckinCalendar({
+  checkins,
+  groupedCheckins,
+  initialMonth,
+}: {
+  checkins: Checkin[];
+  groupedCheckins: Map<string, Checkin[]>;
+  initialMonth: Date;
+}) {
+  const [selected, setSelected] = useState<Date>(initialMonth);
+  const selectedCheckins = groupedCheckins.get(dayKey(selected)) ?? [];
+
+  return (
+    <div className="mt-3 overflow-hidden rounded-3xl border bg-card">
+      <Calendar
+        mode="single"
+        locale={ptBR}
+        selected={selected}
+        defaultMonth={initialMonth}
+        onSelect={(day) => day && setSelected(day)}
+        showOutsideDays={false}
+        className="w-full p-4 [--cell-size:2.5rem]"
+        classNames={{
+          root: "w-full",
+          month: "w-full",
+          table: "w-full border-collapse",
+          caption_label: "font-display text-lg capitalize text-navy",
+        }}
+        components={{
+          DayButton: (props) => {
+            const entries = groupedCheckins.get(dayKey(props.day.date)) ?? [];
+            const latest = entries[0];
+            return (
+              <CalendarDayButton
+                {...props}
+                aria-label={
+                  latest
+                    ? `${props.day.date.toLocaleDateString("pt-BR")}: ${moodLabel(latest.mood)}`
+                    : props.day.date.toLocaleDateString("pt-BR")
+                }
+              >
+                <span>{props.day.date.getDate()}</span>
+                <span aria-hidden="true" className="h-4 leading-4">
+                  {latest ? moodEmoji(latest.mood) : ""}
+                </span>
+              </CalendarDayButton>
+            );
+          },
+        }}
+      />
+
+      <div className="border-t bg-muted/30 p-4">
+        <p className="text-sm font-semibold capitalize text-navy">{dayFmt.format(selected)}</p>
+        {selectedCheckins.length === 0 ? (
+          <p className="mt-2 text-sm text-muted-foreground">Nenhum check-in neste dia.</p>
+        ) : (
+          <ul className="mt-2 space-y-2">
+            {selectedCheckins.map((checkin) => (
+              <li
+                key={checkin.id}
+                className="flex items-start gap-3 rounded-2xl bg-card p-3 text-sm"
+              >
+                <span className="text-xl" aria-hidden="true">
+                  {moodEmoji(checkin.mood)}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold">{moodLabel(checkin.mood)}</p>
+                  {checkin.note && (
+                    <p className="mt-0.5 break-words text-xs text-muted-foreground">
+                      {checkin.note}
+                    </p>
+                  )}
+                </div>
+                <time
+                  dateTime={checkin.created_at}
+                  className="shrink-0 text-xs text-muted-foreground"
+                >
+                  {timeFmt.format(new Date(checkin.created_at))}
+                </time>
+              </li>
+            ))}
+          </ul>
+        )}
+        <p className="mt-3 text-center text-xs text-muted-foreground">
+          {checkins.length} check-in{checkins.length === 1 ? "" : "s"} registrado
+          {checkins.length === 1 ? "" : "s"} · toque em um dia para ver os detalhes
+        </p>
+      </div>
     </div>
   );
 }
