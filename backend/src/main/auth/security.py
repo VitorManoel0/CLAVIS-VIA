@@ -1,11 +1,20 @@
 import os
+import secrets
 from datetime import datetime, timedelta, timezone
+
 import jwt
+from dotenv import load_dotenv
 from pwdlib import PasswordHash
+
+load_dotenv()
 
 password_hash = PasswordHash.recommended()
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "change-me-in-development")
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+if not JWT_SECRET_KEY:
+    if os.getenv("ENVIRONMENT") == "production":
+        raise RuntimeError("JWT_SECRET_KEY must be configured in production")
+    JWT_SECRET_KEY = secrets.token_urlsafe(32)
 JWT_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "60"))
 
 def hash_password(password: str) -> str: return password_hash.hash(password)

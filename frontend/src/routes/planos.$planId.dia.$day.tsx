@@ -88,7 +88,13 @@ function DayPage() {
 
       {tab === "Conteúdo" && (
         <div className="mt-4">
-          <img src={planImage(plan.id)} alt="" width={992} height={672} className="h-44 w-full rounded-2xl object-cover" />
+          <img
+            src={planImage(plan.id)}
+            alt=""
+            width={992}
+            height={672}
+            className="h-44 w-full rounded-2xl object-cover"
+          />
           <h2 className="mt-4 text-xl">Mensagem de hoje</h2>
           <p className="mt-2 text-sm leading-relaxed text-secondary-foreground">{d.content}</p>
         </div>

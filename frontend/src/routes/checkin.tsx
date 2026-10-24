@@ -46,7 +46,9 @@ function CheckinPage() {
           <X className="h-6 w-6" />
         </Link>
         <h1 className="mt-4 text-4xl leading-tight">Como você está chegando hoje?</h1>
-        <p className="mt-2 text-muted-foreground">Escolha o que mais representa seu momento agora.</p>
+        <p className="mt-2 text-muted-foreground">
+          Escolha o que mais representa seu momento agora.
+        </p>
 
         <div className="mt-8 grid grid-cols-3 gap-3">
           {MOODS.map((m) => {
@@ -83,7 +85,10 @@ function CheckinPage() {
         >
           {selectedMood ? (
             <p>
-              Humor selecionado: <span className="text-xl" aria-hidden>{selectedMood.emoji}</span>{" "}
+              Humor selecionado:{" "}
+              <span className="text-xl" aria-hidden>
+                {selectedMood.emoji}
+              </span>{" "}
               <strong>{selectedMood.label}</strong>
             </p>
           ) : (

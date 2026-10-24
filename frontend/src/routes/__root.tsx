@@ -76,7 +76,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "CLAVIS VIA" },
-      { name: "description", content: "Acompanhamento emocional diário: check-in, práticas e planos." },
+      {
+        name: "description",
+        content: "Acompanhamento emocional diário: check-in, práticas e planos.",
+      },
       { name: "theme-color", content: "#f6f5fc" },
     ],
     links: [

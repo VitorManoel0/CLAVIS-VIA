@@ -8,6 +8,8 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
+    "deploy": "node scripts/check-deploy-env.mjs && npm run build && WRANGLER_SEND_METRICS=false WRANGLER_SEND_ERROR_REPORTS=false wrangler deploy",
+    "cf-typegen": "wrangler types",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
@@ -91,6 +93,7 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "8.1.5",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "wrangler": "^4.152.0"
   }
 }

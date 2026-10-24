@@ -8,9 +8,11 @@ from src.main.routes.plans_routes import plans_router
 from src.main.auth.security import decode_access_token
 import jwt
 import os
+
 app = FastAPI()
 
 PUBLIC_PATHS = {
+    "/health",
     "/auth/login",
     "/auth/register",
     "/docs",
@@ -34,17 +36,26 @@ async def require_jwt(request: Request, call_next):
 
 # Accept a comma-separated list for deployments or LAN development.
 # Register CORS last so even JWT rejections include the CORS headers.
-# frontend_origins = os.getenv(
-#     "FRONTEND_URLS",
-#     os.getenv("FRONTEND_URL", "http://localhost:8080,http://127.0.0.1:8080"),
-# )
+frontend_origins = [
+    origin.strip().rstrip("/")
+    for origin in os.getenv(
+        "FRONTEND_URLS",
+        "http://localhost:8080,http://127.0.0.1:8080",
+    ).split(",")
+    if origin.strip()
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=frontend_origins,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["Authorization", "Content-Type"],
 )
+
+
+@app.get("/health", tags=["Infraestrutura"])
+def health():
+    return {"status": "ok"}
 
 app.include_router(users_routers)
 app.include_router(auth_router)

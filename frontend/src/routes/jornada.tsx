@@ -25,7 +25,12 @@ export const Route = createFileRoute("/jornada")({
 });
 
 const WEEK = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-const fmt = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+const fmt = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "short",
+  hour: "2-digit",
+  minute: "2-digit",
+});
 
 function Journey() {
   const checkins = useQuery(checkinsQuery);
@@ -53,7 +58,10 @@ function Journey() {
 
   const done = new Set(completions.data?.map((c) => c.plan_day_id));
   const started = (plans.data ?? [])
-    .map((p) => ({ plan: p, count: days.data?.filter((d) => d.plan_id === p.id && done.has(d.id)).length ?? 0 }))
+    .map((p) => ({
+      plan: p,
+      count: days.data?.filter((d) => d.plan_id === p.id && done.has(d.id)).length ?? 0,
+    }))
     .filter((x) => x.count > 0);
 
   const dayById = new Map(days.data?.map((d) => [d.id, d]));
@@ -66,7 +74,9 @@ function Journey() {
       <section className="rounded-3xl border bg-card p-5">
         <p>
           <span className="font-display text-4xl">{streak}</span>{" "}
-          <span className="text-sm">dia{streak === 1 ? "" : "s"} consecutivo{streak === 1 ? "" : "s"}</span>
+          <span className="text-sm">
+            dia{streak === 1 ? "" : "s"} consecutivo{streak === 1 ? "" : "s"}
+          </span>
         </p>
         <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[11px] text-muted-foreground">
           {last7.map((d) => {
@@ -99,7 +109,9 @@ function Journey() {
                   <p className="font-semibold">{moodLabel(c.mood)}</p>
                   {c.note && <p className="text-xs text-muted-foreground line-clamp-1">{c.note}</p>}
                 </div>
-                <span className="text-xs text-muted-foreground">{fmt.format(new Date(c.created_at))}</span>
+                <span className="text-xs text-muted-foreground">
+                  {fmt.format(new Date(c.created_at))}
+                </span>
               </li>
             ))}
           </ul>
@@ -119,7 +131,11 @@ function Journey() {
           <ul className="mt-2 space-y-2">
             {started.map(({ plan, count }) => (
               <li key={plan.id}>
-                <Link to="/planos/$planId" params={{ planId: plan.id }} className="block rounded-2xl border bg-card p-4">
+                <Link
+                  to="/planos/$planId"
+                  params={{ planId: plan.id }}
+                  className="block rounded-2xl border bg-card p-4"
+                >
                   <div className="flex justify-between text-sm">
                     <span className="font-semibold">{plan.title}</span>
                     <span className="text-muted-foreground">
@@ -127,7 +143,10 @@ function Journey() {
                     </span>
                   </div>
                   <div className="mt-2 h-1.5 rounded-full bg-muted">
-                    <div className="h-full rounded-full bg-primary" style={{ width: `${planProgress(count, plan.total_days)}%` }} />
+                    <div
+                      className="h-full rounded-full bg-primary"
+                      style={{ width: `${planProgress(count, plan.total_days)}%` }}
+                    />
                   </div>
                 </Link>
               </li>
@@ -140,7 +159,8 @@ function Journey() {
         <h2 className="text-2xl">Minhas conquistas</h2>
         <ul className="mt-2 divide-y rounded-2xl border bg-card text-sm">
           <li className="flex items-center gap-3 p-3">
-            <Heart className="h-4 w-4 text-primary" /> Fiz {list.length} check-in{list.length === 1 ? "" : "s"}
+            <Heart className="h-4 w-4 text-primary" /> Fiz {list.length} check-in
+            {list.length === 1 ? "" : "s"}
           </li>
           {(completions.data ?? []).slice(0, 5).map((c) => {
             const d = dayById.get(c.plan_day_id);
@@ -151,7 +171,9 @@ function Journey() {
                 <span className="flex-1">
                   Concluí o Dia {d?.day_number} de “{p?.title ?? "plano"}”
                 </span>
-                <span className="text-xs text-muted-foreground">{fmt.format(new Date(c.completed_at))}</span>
+                <span className="text-xs text-muted-foreground">
+                  {fmt.format(new Date(c.completed_at))}
+                </span>
               </li>
             );
           })}

@@ -6,9 +6,16 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "CLAVIS VIA — Seu caminho de volta para si" },
-      { name: "description", content: "Check-in emocional diário, práticas curtas e planos temáticos para acompanhar sua jornada." },
+      {
+        name: "description",
+        content:
+          "Check-in emocional diário, práticas curtas e planos temáticos para acompanhar sua jornada.",
+      },
       { property: "og:title", content: "CLAVIS VIA — Seu caminho de volta para si" },
-      { property: "og:description", content: "Check-in emocional diário, práticas curtas e planos temáticos." },
+      {
+        property: "og:description",
+        content: "Check-in emocional diário, práticas curtas e planos temáticos.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -34,8 +41,18 @@ function Entry() {
         </div>
 
         <div className="w-full space-y-4">
-          <button onClick={() => navigate({ to: "/login" })} className="w-full rounded-full bg-navy py-4 font-semibold text-navy-foreground">Entrar</button>
-          <button onClick={() => navigate({ to: "/cadastro" })} className="w-full rounded-full border border-navy py-4 font-semibold text-navy">Criar minha conta</button>
+          <button
+            onClick={() => navigate({ to: "/login" })}
+            className="w-full rounded-full bg-navy py-4 font-semibold text-navy-foreground"
+          >
+            Entrar
+          </button>
+          <button
+            onClick={() => navigate({ to: "/cadastro" })}
+            className="w-full rounded-full border border-navy py-4 font-semibold text-navy"
+          >
+            Criar minha conta
+          </button>
           <p className="text-center text-[11px] text-muted-foreground">
             Protótipo com dados fictícios. Não substitui acompanhamento profissional.
           </p>

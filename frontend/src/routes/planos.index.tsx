@@ -11,7 +11,10 @@ export const Route = createFileRoute("/planos/")({
   head: () => ({
     meta: [
       { title: "Planos — CLAVIS VIA" },
-      { name: "description", content: "Planos curtos e temáticos para atravessar momentos difíceis." },
+      {
+        name: "description",
+        content: "Planos curtos e temáticos para atravessar momentos difíceis.",
+      },
       { property: "og:title", content: "Planos — CLAVIS VIA" },
       { property: "og:description", content: "Planos curtos e temáticos para o seu momento." },
       { property: "og:type", content: "website" },
@@ -51,7 +54,9 @@ function Plans() {
             key={t.id}
             onClick={() => setTheme(t.id)}
             className={`shrink-0 rounded-full px-4 py-1.5 text-sm ${
-              theme === t.id ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"
+              theme === t.id
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary text-secondary-foreground"
             }`}
           >
             {t.label}
@@ -66,7 +71,8 @@ function Plans() {
       ) : (
         <ul className="mt-5 space-y-3">
           {list.map((p) => {
-            const count = days.data?.filter((d) => d.plan_id === p.id && done.has(d.id)).length ?? 0;
+            const count =
+              days.data?.filter((d) => d.plan_id === p.id && done.has(d.id)).length ?? 0;
             return (
               <li key={p.id}>
                 <Link
@@ -74,11 +80,19 @@ function Plans() {
                   params={{ planId: p.id }}
                   className="flex items-center gap-4 overflow-hidden rounded-2xl border bg-card pr-4"
                 >
-                  <img src={planImage(p.id)} alt="" loading="lazy" width={992} height={672} className="h-24 w-28 object-cover" />
+                  <img
+                    src={planImage(p.id)}
+                    alt=""
+                    loading="lazy"
+                    width={992}
+                    height={672}
+                    className="h-24 w-28 object-cover"
+                  />
                   <div className="flex-1 py-2">
                     <p className="font-display text-lg leading-tight">{p.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {p.total_days} dias{count > 0 && ` · ${count} concluído${count > 1 ? "s" : ""}`}
+                      {p.total_days} dias
+                      {count > 0 && ` · ${count} concluído${count > 1 ? "s" : ""}`}
                     </p>
                   </div>
                   <ChevronRight className="h-5 w-5 text-muted-foreground" />
@@ -86,7 +100,9 @@ function Plans() {
               </li>
             );
           })}
-          {list.length === 0 && <p className="text-sm text-muted-foreground">Nenhum plano neste tema ainda.</p>}
+          {list.length === 0 && (
+            <p className="text-sm text-muted-foreground">Nenhum plano neste tema ainda.</p>
+          )}
         </ul>
       )}
       <Disclaimer />

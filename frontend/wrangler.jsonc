@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "clavis-via",
+  "compatibility_date": "2026-10-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": ".output/server/index.mjs",
+  "assets": {
+    "directory": ".output/public",
+  },
+  "observability": {
+    "enabled": true,
+  },
+  "send_metrics": false,
+  "dependencies_instrumentation": {
+    "enabled": false,
+  },
+}

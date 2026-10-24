@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: clavis-via-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    # Render's free plan has no pre-deploy command, so migrations run in the
+    # build phase and abort the deployment if they fail.
+    buildCommand: pip install -r requirements.txt && alembic upgrade head
+    startCommand: uvicorn src.main.server.server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: JWT_EXPIRE_MINUTES
+        value: 60
+      - key: FRONTEND_URLS
+        sync: false
+      - key: ENVIRONMENT
+        value: production

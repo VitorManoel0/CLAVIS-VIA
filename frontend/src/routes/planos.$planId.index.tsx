@@ -49,8 +49,18 @@ function PlanDetail() {
   return (
     <div>
       <div className="relative">
-        <img src={planImage(plan.id)} alt="" width={992} height={672} className="h-56 w-full object-cover" />
-        <Link to="/planos" aria-label="Voltar" className="absolute left-4 top-4 rounded-full bg-card/80 p-2">
+        <img
+          src={planImage(plan.id)}
+          alt=""
+          width={992}
+          height={672}
+          className="h-56 w-full object-cover"
+        />
+        <Link
+          to="/planos"
+          aria-label="Voltar"
+          className="absolute left-4 top-4 rounded-full bg-card/80 p-2"
+        >
           <ChevronLeft className="h-5 w-5" />
         </Link>
       </div>
@@ -74,7 +84,10 @@ function PlanDetail() {
             </span>
           </div>
           <div className="mt-1 h-1.5 rounded-full bg-muted">
-            <div className="h-full rounded-full bg-primary" style={{ width: `${planProgress(doneCount, plan.total_days)}%` }} />
+            <div
+              className="h-full rounded-full bg-primary"
+              style={{ width: `${planProgress(doneCount, plan.total_days)}%` }}
+            />
           </div>
         </div>
 
@@ -90,7 +103,9 @@ function PlanDetail() {
                 >
                   <span
                     className={`flex h-8 w-8 items-center justify-center rounded-full text-sm ${
-                      isDone ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"
+                      isDone
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-secondary text-secondary-foreground"
                     }`}
                   >
                     {isDone ? <Check className="h-4 w-4" /> : d.day_number}
@@ -115,7 +130,9 @@ function PlanDetail() {
             {doneCount === 0 ? "Começar plano" : `Continuar no Dia ${next.day_number}`}
           </Link>
         ) : (
-          <p className="mt-5 rounded-2xl bg-mint p-4 text-center text-sm">Você concluiu este plano. Que caminhada bonita.</p>
+          <p className="mt-5 rounded-2xl bg-mint p-4 text-center text-sm">
+            Você concluiu este plano. Que caminhada bonita.
+          </p>
         )}
       </div>
     </div>
