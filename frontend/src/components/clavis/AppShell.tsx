@@ -34,7 +34,9 @@ export function AppShell({ children, nav = true }: { children: ReactNode; nav?: 
   }
 
   useEffect(() => {
-    if (!loading && !session) navigate({ to: "/login" });
+    if (loading) return;
+    if (!session) navigate({ to: "/login" });
+    else if (!session.onboarding_completed) navigate({ to: "/onboarding" });
   }, [loading, session, navigate]);
 
   return (
@@ -52,7 +54,7 @@ export function AppShell({ children, nav = true }: { children: ReactNode; nav?: 
         </div>
       )}
       <main className="flex-1 pb-24">
-        {loading || !session ? (
+        {loading || !session || !session.onboarding_completed ? (
           <div className="flex h-64 items-center justify-center text-muted-foreground">
             <Loader2 className="h-5 w-5 animate-spin" />
           </div>

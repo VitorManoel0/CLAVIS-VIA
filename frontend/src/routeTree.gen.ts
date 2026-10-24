@@ -15,6 +15,7 @@ import { Route as CheckinRouteImport } from './routes/checkin'
 import { Route as HojeRouteImport } from './routes/hoje'
 import { Route as JornadaRouteImport } from './routes/jornada'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as PlanosIndexRouteImport } from './routes/planos.index'
 import { Route as PlanosPlanIdIndexRouteImport } from './routes/planos.$planId.index'
 import { Route as PlanosPlanIdDiaDayRouteImport } from './routes/planos.$planId.dia.$day'
@@ -49,6 +50,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlanosIndexRoute = PlanosIndexRouteImport.update({
   id: '/planos/',
   path: '/planos/',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/hoje': typeof HojeRoute
   '/jornada': typeof JornadaRoute
   '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
   '/planos/': typeof PlanosIndexRoute
   '/planos/$planId/': typeof PlanosPlanIdIndexRoute
   '/planos/$planId/dia/$day': typeof PlanosPlanIdDiaDayRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/hoje': typeof HojeRoute
   '/jornada': typeof JornadaRoute
   '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
   '/planos': typeof PlanosIndexRoute
   '/planos/$planId': typeof PlanosPlanIdIndexRoute
   '/planos/$planId/dia/$day': typeof PlanosPlanIdDiaDayRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/hoje': typeof HojeRoute
   '/jornada': typeof JornadaRoute
   '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
   '/planos/': typeof PlanosIndexRoute
   '/planos/$planId/': typeof PlanosPlanIdIndexRoute
   '/planos/$planId/dia/$day': typeof PlanosPlanIdDiaDayRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/hoje'
     | '/jornada'
     | '/login'
+    | '/onboarding'
     | '/planos/'
     | '/planos/$planId/'
     | '/planos/$planId/dia/$day'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/hoje'
     | '/jornada'
     | '/login'
+    | '/onboarding'
     | '/planos'
     | '/planos/$planId'
     | '/planos/$planId/dia/$day'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/hoje'
     | '/jornada'
     | '/login'
+    | '/onboarding'
     | '/planos/'
     | '/planos/$planId/'
     | '/planos/$planId/dia/$day'
@@ -142,6 +154,7 @@ export interface RootRouteChildren {
   HojeRoute: typeof HojeRoute
   JornadaRoute: typeof JornadaRoute
   LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRoute
   PlanosIndexRoute: typeof PlanosIndexRoute
   PlanosPlanIdIndexRoute: typeof PlanosPlanIdIndexRoute
   PlanosPlanIdDiaDayRoute: typeof PlanosPlanIdDiaDayRoute
@@ -191,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/planos/': {
       id: '/planos/'
       path: '/planos'
@@ -222,6 +242,7 @@ const rootRouteChildren: RootRouteChildren = {
   HojeRoute: HojeRoute,
   JornadaRoute: JornadaRoute,
   LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRoute,
   PlanosIndexRoute: PlanosIndexRoute,
   PlanosPlanIdIndexRoute: PlanosPlanIdIndexRoute,
   PlanosPlanIdDiaDayRoute: PlanosPlanIdDiaDayRoute,

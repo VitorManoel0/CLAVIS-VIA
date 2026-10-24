@@ -20,12 +20,16 @@ function Register() {
       ser("As senhas não conferem.");
       return;
     }
+    setSubmitting(true);
+    ser("");
     try {
       const user = await register(name, email, p);
       queryClient.setQueryData(["auth", "current-user"], user);
-      n({ to: "/hoje" });
+      n({ to: "/onboarding" });
     } catch (x) {
       ser(x instanceof Error ? x.message : "Não foi possível criar a conta.");
+    } finally {
+      setSubmitting(false);
     }
   }
   return (
@@ -77,7 +81,12 @@ function Register() {
           onChange={(x) => sc(x.target.value)}
           className="rounded-xl border p-4"
         />
-        <button className="rounded-full bg-navy py-4 text-white">Criar minha conta</button>
+        <button
+          disabled={submitting}
+          className="rounded-full bg-navy py-4 text-white disabled:opacity-60"
+        >
+          {submitting ? "Criando sua conta..." : "Criar minha conta"}
+        </button>
         <p>
           Já tem conta?{" "}
           <Link to="/login" className="underline">

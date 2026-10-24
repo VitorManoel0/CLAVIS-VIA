@@ -20,7 +20,7 @@ function Login() {
     try {
       const user = await login(e, p);
       queryClient.setQueryData(["auth", "current-user"], user);
-      n({ to: "/hoje" });
+      n({ to: user.onboarding_completed ? "/hoje" : "/onboarding" });
     } catch (x) {
       ser(x instanceof Error ? x.message : "Não foi possível entrar.");
     } finally {

@@ -7,8 +7,23 @@ from src.main.models.user import User
 from src.main.validators.user_register_validator import UserLoginValidator, UserRegisterValidator
 
 auth_router = APIRouter(prefix="/auth", tags=["Autenticação"])
-def public_user(user: User): return {"id": str(user.id), "name": user.name, "email": user.email}
-def token_response(user: User): return {"user": public_user(user), "access_token": create_access_token(str(user.id)), "token_type": "bearer"}
+
+
+def public_user(user: User):
+    return {
+        "id": str(user.id),
+        "name": user.name,
+        "email": user.email,
+        "onboarding_completed": user.onboarding_completed,
+    }
+
+
+def token_response(user: User):
+    return {
+        "user": public_user(user),
+        "access_token": create_access_token(str(user.id)),
+        "token_type": "bearer",
+    }
 
 @auth_router.post("/register", status_code=status.HTTP_201_CREATED)
 def register(body: UserRegisterValidator, db: Session = Depends(get_db)):
@@ -26,3 +41,11 @@ def login(body: UserLoginValidator, db: Session = Depends(get_db)):
 
 @auth_router.get("/me")
 def me(user: User = Depends(get_current_user)): return public_user(user)
+
+
+@auth_router.patch("/onboarding")
+def complete_onboarding(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    user.onboarding_completed = True
+    db.commit()
+    db.refresh(user)
+    return public_user(user)
