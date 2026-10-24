@@ -8,7 +8,7 @@ Aplicação de acolhimento emocional com check-in de humor, recomendações e pl
 - API: [clavis-via-api.onrender.com](https://clavis-via-api.onrender.com)
 - Swagger: [clavis-via-api.onrender.com/docs](https://clavis-via-api.onrender.com/docs)
 
-O backend usa o plano gratuito do Render e pode levar alguns segundos para iniciar após um período sem uso. O frontend exibe uma tela de espera enquanto consulta `/health`.
+#### O backend usa o plano gratuito do Render e pode levar alguns segundos para iniciar após um período sem uso. O frontend exibe uma tela de espera enquanto consulta `/health`.
 
 ## Conta de demonstração
 
