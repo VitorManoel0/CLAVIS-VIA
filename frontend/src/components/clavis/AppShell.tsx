@@ -101,6 +101,19 @@ export function QueryError({ error }: { error: unknown }) {
   );
 }
 
+export function PageLoading({ label = "Carregando..." }: { label?: string }) {
+  return (
+    <div
+      className="flex h-64 flex-col items-center justify-center gap-3 text-muted-foreground"
+      role="status"
+      aria-live="polite"
+    >
+      <Loader2 className="h-6 w-6 animate-spin" aria-hidden="true" />
+      <span className="text-sm">{label}</span>
+    </div>
+  );
+}
+
 export function Disclaimer() {
   return (
     <p className="px-6 pt-6 text-center text-[11px] leading-relaxed text-muted-foreground">

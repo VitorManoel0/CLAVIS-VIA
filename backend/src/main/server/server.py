@@ -34,13 +34,13 @@ async def require_jwt(request: Request, call_next):
         return JSONResponse(status_code=401, content={"detail": "Token inválido ou expirado"})
     return await call_next(request)
 
-# Accept a comma-separated list for deployments or LAN development.
-# Register CORS last so even JWT rejections include the CORS headers.
+
 frontend_origins = [
     origin.strip().rstrip("/")
     for origin in os.getenv(
         "FRONTEND_URLS",
-        "http://localhost:8080,http://127.0.0.1:8080",
+        "http://localhost:8081,"
+        "http://127.0.0.1:8081",
     ).split(",")
     if origin.strip()
 ]

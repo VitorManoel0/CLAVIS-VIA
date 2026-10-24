@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ArrowRight, BookOpen, ChevronRight, Wind } from "lucide-react";
-import { AppShell, Disclaimer, QueryError } from "@/components/clavis/AppShell";
+import { AppShell, Disclaimer, PageLoading, QueryError } from "@/components/clavis/AppShell";
 import { KeyIcon, Wordmark } from "@/components/clavis/KeyLogo";
 import { allPlanDaysQuery, checkinsQuery, completionsQuery, plansQuery } from "@/lib/api";
 import { useSession } from "@/hooks/use-session";
@@ -45,7 +45,11 @@ function Today() {
   const completions = useQuery(completionsQuery);
   const [showPractice, setShowPractice] = useState(false);
 
-  if (checkins.error) return <QueryError error={checkins.error} />;
+  const error = checkins.error ?? plans.error ?? days.error ?? completions.error;
+  if (error) return <QueryError error={error} />;
+  if (checkins.isLoading || plans.isLoading || days.isLoading || completions.isLoading) {
+    return <PageLoading label="Preparando sua chave de hoje..." />;
+  }
 
   const last = checkins.data?.[0];
   const checkedToday = last && dayKey(new Date(last.created_at)) === dayKey(new Date());

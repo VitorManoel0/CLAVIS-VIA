@@ -11,6 +11,7 @@ import {
 import { type ReactNode } from "react";
 
 import { Toaster } from "@/components/ui/sonner";
+import { ServerStartupGate } from "@/components/clavis/ServerStartupGate";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -121,8 +122,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <ServerStartupGate>
+        <Outlet />
+      </ServerStartupGate>
       <Toaster position="top-center" />
     </QueryClientProvider>
   );
